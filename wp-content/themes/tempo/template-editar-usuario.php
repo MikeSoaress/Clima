@@ -1,14 +1,33 @@
 <?php
 /*
-Template Name: Registro de Usuário
+Template Name: Edição de Usuário
 */
 
 get_header();
 
+// Verifica se o usuário está logado
+if (!is_user_logged_in()) {
+    echo '<p>Você precisa estar logado para acessar esta página.</p>';
+    get_footer();
+    exit;
+}
+
+// Obtém os dados do usuário atual
+$current_user = wp_get_current_user();
+
+$email = $current_user->user_email;
+$first_name = $current_user->first_name;
+$cep = get_user_meta($current_user->ID, 'cep', true);
+$estado = get_user_meta($current_user->ID, 'estado', true);
+$cidade = get_user_meta($current_user->ID, 'cidade', true);
+$bairro = get_user_meta($current_user->ID, 'bairro', true);
+$logradouro = get_user_meta($current_user->ID, 'logradouro', true);
+$numero = get_user_meta($current_user->ID, 'numero', true);
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = sanitize_text_field($_POST['username']);
     $email = sanitize_email($_POST['email']);
     $password = $_POST['password'];
+    $first_name = sanitize_text_field($_POST['username']);
     $cep = sanitize_text_field($_POST['cep']);
     $estado = sanitize_text_field($_POST['estado']);
     $cidade = sanitize_text_field($_POST['cidade']);
@@ -19,8 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = array();
 
     // Verificação de campos obrigatórios
-    if (empty($username) || empty($email) || empty($password) ||
-        empty($cep) || empty($estado) || empty($cidade) || empty($bairro) || empty($logradouro) || empty($numero)) {
+    if (empty($email) || empty($first_name) ||  empty($cep) || empty($estado) || empty($cidade) || empty($bairro) || empty($logradouro) ||  empty($numero)) {
         $errors[] = 'Todos os campos são obrigatórios.';
     }
 
@@ -29,35 +47,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors[] = 'Por favor, insira um endereço de e-mail válido.';
     }
 
-    // Verificação de e-mail existente
-    if (email_exists($email)) {
+    // Verificação de e-mail existente, se alterado
+    if ($email !== $current_user->user_email && email_exists($email)) {
         $errors[] = 'Este e-mail já está registrado.';
     }
 
     if (empty($errors)) {
         // Dados do usuário
         $userdata = array(
-            'user_login'    => $email,
-            'user_email'    => $email,
-            'user_pass'     => $password,
-            'first_name'    => $username,
-            'meta_input'    => array(
-                'cep'           => $cep,
-                'estado'        => $estado,
-                'cidade'        => $cidade,
-                'bairro'        => $bairro,
-                'logradouro'    => $logradouro,
-                'numero'        => $numero
-            )
+            'ID' => $current_user->ID,
+            'user_email' => $email,
+            'first_name' => $first_name,
+            'display_name' => $first_name,
         );
 
-        // Criação do usuário
-        $user_id = wp_insert_user($userdata);
+        // Atualização da senha, se fornecida
+        if (!empty($password)) {
+            $userdata['user_pass'] = $password;
+        }
+
+        // Atualização do usuário
+        $user_id = wp_update_user($userdata);
 
         if (is_wp_error($user_id)) {
             $errors[] = $user_id->get_error_message();
         } else {
-            echo '<div class="alert alert-success">Cadastro realizado com sucesso.</div>';
+            // Atualização dos meta-dados de endereço
+            update_user_meta($current_user->ID, 'cep', $cep);
+            update_user_meta($current_user->ID, 'estado', $estado);
+            update_user_meta($current_user->ID, 'cidade', $cidade);
+            update_user_meta($current_user->ID, 'bairro', $bairro);
+            update_user_meta($current_user->ID, 'logradouro', $logradouro);
+            update_user_meta($current_user->ID, 'numero', $numero);
+
+            echo '<div class="alert alert-success">Perfil atualizado com sucesso.</div>';
         }
     }
 
@@ -65,11 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo '<div class="alert alert-danger">' . implode('<br>', $errors) . '</div>';
     }
 }
-
 ?>
 
 <div class="container mt-5 mb-5" id="container-cadastro">
-    <h4>Cadastro</h4>
+    <h4>Edição de cadastro</h4>
     <form action="" method="post">
         <div class="row">
             <div class="col-12 separador">
@@ -77,22 +99,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="col-12 form-group">
                 <label for="username">Nome</label>
-                <input type="text" class="form-control obrigatorio" name="username" id="username">
+                <input type="text" class="form-control obrigatorio" name="username" id="username" value="<?php echo esc_attr($first_name); ?>">
             </div>
             <div class="form-group col-12 col-md-6">
                 <label for="email">E-mail</label>
-                <input type="email" class="form-control obrigatorio" name="email" id="email">
+                <input type="email" class="form-control obrigatorio" name="email" id="email" value="<?php echo esc_attr($email); ?>">
             </div>
             <div class="form-group col-12 col-md-6">
                 <label for="password">Senha</label>
-                <input type="password" class="form-control obrigatorio" name="password" id="password">
+                <input type="password" class="form-control" name="password" id="password" >
             </div>
             <div class="col-12 separador">
                 <span>Dados de endereço</span>
             </div>
             <div class="form-group col-12 col-md-8">
                 <label for="cep">CEP</label>
-                <input type="text" class="form-control obrigatorio" name="cep" id="cep">
+                <input type="text" class="form-control obrigatorio" name="cep" id="cep" value="<?php echo esc_attr($cep); ?>">
             </div>
             <div class="form-group col-12 col-md-4">
                 <label for="estado">Estado</label>
@@ -129,28 +151,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="form-group col-12 col-md-6">
                 <label for="cidade">Cidade</label>
-                <input type="text" class="form-control obrigatorio" name="cidade" id="cidade">
+                <input type="text" class="form-control obrigatorio" name="cidade" id="cidade" value="<?php echo esc_attr($cidade); ?>">
             </div>
             <div class="form-group col-12 col-md-6">
                 <label for="bairro">Bairro</label>
-                <input type="text" class="form-control obrigatorio" name="bairro" id="bairro">
+                <input type="text" class="form-control obrigatorio" name="bairro" id="bairro" value="<?php echo esc_attr($bairro); ?>">
             </div>
             <div class="form-group col-12 col-md-9">
                 <label for="logradouro">Logradouro</label>
-                <input type="text" class="form-control obrigatorio" name="logradouro" id="logradouro">
+                <input type="text" class="form-control obrigatorio" name="logradouro" id="logradouro" value="<?php echo esc_attr($logradouro); ?>">
             </div>
             <div class="form-group col-12 col-md-3">
                 <label for="numero">Número</label>
-                <input type="text" class="form-control obrigatorio" name="numero" id="numero">
+                <input type="text" class="form-control obrigatorio" name="numero" id="numero" value="<?php echo esc_attr($numero); ?>">
             </div>
             <div class="col-12 text-center d-none" id="msg_alerta">
                 <span style="padding: 5px 20px;color: red;">Preencha os campos em destaque!</span>
             </div>
             <div class="col-12 text-center mt-4">
-                <button type="submit" class="btn btn-primary" onclick="return validarCampos('obrigatorio','msg_alerta')">Cadastrar</button>
+                <button type="submit" class="btn btn-primary"
+                    onclick="return validarCampos('obrigatorio','msg_alerta')">Salvar</button>
             </div>
         </div>
     </form>
 </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var estadoSelecionado = '<?php echo $estado; ?>';
+        var selectEstado = document.getElementById('estado');
+        selectEstado.value = estadoSelecionado;
+    });
+</script>
 
 <?php get_footer(); ?>

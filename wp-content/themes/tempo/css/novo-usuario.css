@@ -1,0 +1,15 @@
+.alerta {
+    background-color: #ff000014 !important;
+}
+
+.separador
+{
+    border-bottom: solid 2px #d0d0d0; margin-bottom:10px
+}
+
+#container-cadastro
+{
+    padding: 2rem;
+    box-shadow: 0px 0px 1px 0px black;
+    border-radius: 13px;
+}

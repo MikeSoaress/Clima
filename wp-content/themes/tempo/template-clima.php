@@ -2,38 +2,93 @@
 /*
 Template Name: Visualização de Clima
 */
-
 get_header();
-
-$api_key = 'SUA_CHAVE_API';
-$city = 'São Paulo';
-
-$response = wp_remote_get("http://api.openweathermap.org/data/2.5/weather?q={$city}&appid={$api_key}&units=metric");
-
-if (is_array($response) && !is_wp_error($response)) {
-    $body = json_decode($response['body']);
-    if ($body->cod == 200) {
-        $temperature = $body->main->temp;
-        $description = $body->weather[0]->description;
-        $humidity = $body->main->humidity;
-    } else {
-        $error = 'Não foi possível obter os dados do clima.';
-    }
-} else {
-    $error = 'Erro ao se conectar com a API de clima.';
-}
-
 ?>
-
-<div class="container">
-    <h2>Clima em <?php echo $city; ?></h2>
-    <?php if (isset($error)) : ?>
-        <div class="alert alert-danger"><?php echo $error; ?></div>
-    <?php else : ?>
-        <p>Temperatura: <?php echo $temperature; ?>°C</p>
-        <p>Descrição: <?php echo $description; ?></p>
-        <p>Umidade: <?php echo $humidity; ?>%</p>
-    <?php endif; ?>
+<div class="container" style="max-width: 600px;box-shadow: 0px 0px 3px 0px #0000008a;border-radius: 5px;margin-top: 50px;padding:20px">   
+<div class="row">
+    <div class="col-12">
+    <h4 class="text-center">Clima atual</h4> 
+    </div>
+        <div class="col-6">
+        <img style="max-width: 197px;" src="<?php echo get_template_directory_uri(); ?>/assets/images/sol.png" style alt="Descrição da Imagem">
+        </div>
+        <div class="col-6">
+            <span style="font-size:5rem">25°</span>
+            <p>Sensação térmica 25°</p>
+        </div> 
+        <div class="col-12 text-center">
+            <span>Predominantemente nublado</span>
+        </div>  
+    </div>
 </div>
+<h5 class="text-center mt-5 mb-4">Clima próximos 5 dias</h5>
+<div class="container text-center" style="max-width: 600px;box-shadow: 0px 0px 3px 0px #0000008a;border-radius: 5px;padding:20px">
+    <div class="row" style="display: flex;align-items: center;">
+        <div class="col-4">
+            <span>Segunda <br>22/04</span>
+        </div>
+        <div class="col-4">
+        <img style="max-width: 70px;" src="<?php echo get_template_directory_uri(); ?>/assets/images/sol.png" style alt="Descrição da Imagem">
+        </div>
+        <div class="col-4">
+            <span style="font-size:2rem">26°</span>
+        </div> 
+        <div class="col-12 text-center mt-3">
+            <span>Predominantemente nublado</span>
+        </div>  
+    </div>
+</div>
+
+<div class="container text-center" style="max-width: 600px;box-shadow: 0px 0px 3px 0px #0000008a;border-radius: 5px;margin-top: 10px;padding:20px">
+    <div class="row" style="display: flex;align-items: center;">
+        <div class="col-4">
+            <span>Segunda <br>22/04</span>
+        </div>
+        <div class="col-4">
+        <img style="max-width: 70px;" src="<?php echo get_template_directory_uri(); ?>/assets/images/sol.png" style alt="Descrição da Imagem">
+        </div>
+        <div class="col-4">
+            <span style="font-size:2rem">26°</span>
+        </div> 
+        <div class="col-12 text-center mt-3">
+            <span>Predominantemente nublado</span>
+        </div>  
+    </div>
+</div>
+
+<div class="container text-center" style="max-width: 600px;box-shadow: 0px 0px 3px 0px #0000008a;border-radius: 5px;margin-top: 10px;padding:20px">
+    <div class="row" style="display: flex;align-items: center;">
+        <div class="col-4">
+            <span>Segunda <br>22/04</span>
+        </div>
+        <div class="col-4">
+        <img style="max-width: 70px;" src="<?php echo get_template_directory_uri(); ?>/assets/images/sol.png" style alt="Descrição da Imagem">
+        </div>
+        <div class="col-4">
+            <span style="font-size:2rem">26°</span>
+        </div> 
+        <div class="col-12 text-center mt-3">
+            <span>Predominantemente nublado</span>
+        </div>  
+    </div>
+</div>
+
+<div class="container text-center" style="max-width: 600px;box-shadow: 0px 0px 3px 0px #0000008a;border-radius: 5px;margin-top: 10px;padding:20px">
+    <div class="row" style="display: flex;align-items: center;">
+        <div class="col-4">
+            <span>Segunda <br>22/04</span>
+        </div>
+        <div class="col-4">
+        <img style="max-width: 70px;" src="<?php echo get_template_directory_uri(); ?>/assets/images/sol.png" style alt="Descrição da Imagem">
+        </div>
+        <div class="col-4">
+            <span style="font-size:2rem">26°</span>
+        </div> 
+        <div class="col-12 text-center mt-3">
+            <span>Predominantemente nublado</span>
+        </div>  
+    </div>
+</div>
+
 
 <?php get_footer(); ?>
