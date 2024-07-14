@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="position:relative;    min-height: 110vh;">
 
 <head>
     <meta charset="UTF-8">
@@ -11,7 +11,7 @@
 <body style="margin-bottom: 60px;">
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark  d-flex  " style="padding: 0.5rem 2rem;">
-            <a class="navbar-brand" href="/wordpress">Clima</a>
+            <a class="navbar-brand" href="/clima/home">Clima</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -20,12 +20,11 @@
                 <ul class="navbar-nav ">
                     <?php if (is_user_logged_in()) { ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="/wordpress/edicao-usuario">Meus dados</a>
+                            <a class="nav-link" href="/clima/edicao-usuario">Meus dados</a>
                         </li>
-                    <?php } else { ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="/wordpress/login/">Login</a>
-                        </li>
+                            <a class="nav-link" href="/clima/login">Sair</a>
+                        </li> 
                     <?php } ?>
                 </ul>
             </div>

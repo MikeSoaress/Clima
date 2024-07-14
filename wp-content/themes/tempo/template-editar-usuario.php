@@ -3,13 +3,10 @@
 Template Name: Edição de Usuário
 */
 
-get_header();
 
 // Verifica se o usuário está logado
 if (!is_user_logged_in()) {
-    echo '<p>Você precisa estar logado para acessar esta página.</p>';
-    get_footer();
-    exit;
+    wp_redirect(home_url('/login/'));
 }
 
 // Obtém os dados do usuário atual
@@ -88,6 +85,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo '<div class="alert alert-danger">' . implode('<br>', $errors) . '</div>';
     }
 }
+
+get_header();
+
 ?>
 
 <div class="container mt-5 mb-5" id="container-cadastro">
