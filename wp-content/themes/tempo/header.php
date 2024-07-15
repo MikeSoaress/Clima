@@ -18,14 +18,15 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav ">
-                    <?php if (is_user_logged_in()) { ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/clima/edicao-usuario">Meus dados</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/clima/login">Sair</a>
-                        </li> 
-                    <?php } ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/clima/login">Configurações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/clima/edicao-usuario">Meus dados</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/clima/login">Sair</a>
+                    </li>
                 </ul>
             </div>
         </nav>

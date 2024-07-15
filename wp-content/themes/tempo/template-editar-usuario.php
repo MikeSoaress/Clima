@@ -77,17 +77,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             update_user_meta($current_user->ID, 'logradouro', $logradouro);
             update_user_meta($current_user->ID, 'numero', $numero);
 
-            echo '<div class="alert alert-success">Perfil atualizado com sucesso.</div>';
+            echo '<script type="text/javascript">',
+            'document.addEventListener("DOMContentLoaded", function() {',
+            '  exibeModalSimples("Perfil atualizado com sucesso.");',
+            '});',
+            '</script>';
         }
     }
 
     if (!empty($errors)) {
-        echo '<div class="alert alert-danger">' . implode('<br>', $errors) . '</div>';
+        echo '<script type="text/javascript">',
+        'document.addEventListener("DOMContentLoaded", function() {',
+        '  exibeModalSimples("'. implode('<br>', $errors) . '");',
+        '});',
+        '</script>';        
     }
 }
 
 get_header();
-
+get_template_part('modal'); 
 ?>
 
 <div class="container mt-5 mb-5" id="container-cadastro">
@@ -175,7 +183,6 @@ get_header();
         </div>
     </form>
 </div>
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

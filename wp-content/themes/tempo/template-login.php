@@ -54,5 +54,8 @@ get_header();
         </div>
     </form>
 </div>
+<div class="text-center mt-4">
+    <span>Ainda não tem cadastro ? <a href="/clima/cadastro-de-usuario/">Cadastre-se</a></span>
+</div>
 
 <?php get_footer(); ?>

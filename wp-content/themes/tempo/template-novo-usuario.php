@@ -4,7 +4,9 @@ Template Name: Registro de Usuário
 */
 
 get_header();
+get_template_part('modal'); 
 
+$username = $email = $password = $cep = $estado = $cidade = $bairro = $logradouro = $numero = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = sanitize_text_field($_POST['username']);
     $email = sanitize_email($_POST['email']);
@@ -57,14 +59,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (is_wp_error($user_id)) {
             $errors[] = $user_id->get_error_message();
         } else {
-            echo '<div class="alert alert-success">Cadastro realizado com sucesso.</div>';
-        }
+            echo '<script type="text/javascript">',
+            'document.addEventListener("DOMContentLoaded", function() {',
+            '  exibeModalRedirecionamento(\'Cadastro realizado com sucesso. Clique em "Continuar" para fazer login.\', \'/clima/login\');',
+            '});',
+            '</script>';        }
     }
 
     if (!empty($errors)) {
-        echo '<div class="alert alert-danger">' . implode('<br>', $errors) . '</div>';
+        echo '<script type="text/javascript">',
+        'document.addEventListener("DOMContentLoaded", function() {',
+        '  exibeModalSimples("'. implode('<br>', $errors) . '");',
+        '});',
+        '</script>';    
     }
 }
+
+
 
 ?>
 
@@ -77,11 +88,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="col-12 form-group">
                 <label for="username">Nome</label>
-                <input type="text" class="form-control obrigatorio" name="username" id="username">
+                <input type="text" class="form-control obrigatorio" name="username" id="username" value="<?php echo esc_attr($username); ?>">
             </div>
             <div class="form-group col-12 col-md-6">
                 <label for="email">E-mail</label>
-                <input type="email" class="form-control obrigatorio" name="email" id="email">
+                <input type="email" class="form-control obrigatorio" name="email" id="email" value="<?php echo esc_attr($email); ?>">
             </div>
             <div class="form-group col-12 col-md-6">
                 <label for="password">Senha</label>
@@ -92,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="form-group col-12 col-md-8">
                 <label for="cep">CEP</label>
-                <input type="text" class="form-control obrigatorio" name="cep" id="cep">
+                <input type="text" class="form-control obrigatorio" name="cep" id="cep" value="<?php echo esc_attr($cep); ?>">
             </div>
             <div class="form-group col-12 col-md-4">
                 <label for="estado">Estado</label>
@@ -129,19 +140,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="form-group col-12 col-md-6">
                 <label for="cidade">Cidade</label>
-                <input type="text" class="form-control obrigatorio" name="cidade" id="cidade">
+                <input type="text" class="form-control obrigatorio" name="cidade" id="cidade" value="<?php echo esc_attr($cidade); ?>">
             </div>
             <div class="form-group col-12 col-md-6">
                 <label for="bairro">Bairro</label>
-                <input type="text" class="form-control obrigatorio" name="bairro" id="bairro">
-            </div>
+                <input type="text" class="form-control obrigatorio" name="bairro" id="bairro" value="<?php echo esc_attr($bairro); ?>">
+            </div>  
             <div class="form-group col-12 col-md-9">
                 <label for="logradouro">Logradouro</label>
-                <input type="text" class="form-control obrigatorio" name="logradouro" id="logradouro">
+                <input type="text" class="form-control obrigatorio" name="logradouro" id="logradouro" value="<?php echo esc_attr($logradouro); ?>">
             </div>
             <div class="form-group col-12 col-md-3">
                 <label for="numero">Número</label>
-                <input type="text" class="form-control obrigatorio" name="numero" id="numero">
+                <input type="text" class="form-control obrigatorio" name="numero" id="numero" value="<?php echo esc_attr($numero); ?>">
             </div>
             <div class="col-12 text-center d-none" id="msg_alerta">
                 <span style="padding: 5px 20px;color: red;">Preencha os campos em destaque!</span>
@@ -152,5 +163,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var estadoSelecionado = '<?php echo $estado; ?>';
+        var selectEstado = document.getElementById('estado');
+        selectEstado.value = estadoSelecionado;
+    });
+</script>
 
 <?php get_footer(); ?>

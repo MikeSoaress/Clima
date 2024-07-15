@@ -36,9 +36,14 @@ function adicionar_scripts_e_estilos()
     // Scripts personalizados
     wp_enqueue_script('validaCampos-js', get_template_directory_uri() . '/js/validaCampos.js', array('jquery'), null, true);
     wp_enqueue_script('clima-js', get_template_directory_uri() . '/js/clima.js', array('jquery'), null, true);
+    wp_enqueue_script('modal-js', get_template_directory_uri() . '/js/modal.js', array('jquery'), null, true);
 }
 
 add_action('wp_enqueue_scripts', 'adicionar_scripts_e_estilos');
 add_action('wp_enqueue_scripts', 'adicionar_scripts_e_estilos');
+
+if (!current_user_can('administrator')) {
+    add_filter('show_admin_bar', '__return_false');
+}
 
 ?>
