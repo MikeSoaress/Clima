@@ -9,6 +9,9 @@ if (!is_user_logged_in()) {
     wp_redirect(home_url('/login/'));
 }
 
+get_header();
+get_template_part('modal'); 
+
 // Obtém os dados do usuário atual
 $current_user = wp_get_current_user();
 
@@ -94,8 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-get_header();
-get_template_part('modal'); 
+
 ?>
 
 <div class="container mt-5 mb-5" id="container-cadastro">

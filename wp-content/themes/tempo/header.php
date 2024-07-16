@@ -19,7 +19,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav ">
                     <li class="nav-item">
-                        <a class="nav-link" href="/clima/login">Configurações</a>
+                        <a class="nav-link" href="/clima/configuracoes">Configurações</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/clima/edicao-usuario">Meus dados</a>
