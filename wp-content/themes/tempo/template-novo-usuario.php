@@ -3,10 +3,8 @@
 Template Name: Registro de Usuário
 */
 
-get_header();
-get_template_part('modal');
+$username = $email = $key = $password = $cep = $estado = $cidade = $bairro = $logradouro = $numero = '';
 
-$username = $email = $password = $cep = $estado = $cidade = $bairro = $logradouro = $numero = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = sanitize_text_field($_POST['username']);
     $email = sanitize_email($_POST['email']);
@@ -17,13 +15,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bairro = sanitize_text_field($_POST['bairro']);
     $logradouro = sanitize_text_field($_POST['logradouro']);
     $numero = sanitize_text_field($_POST['numero']);
+    $key = $_POST['key'];
 
     $errors = array();
 
     // Verificação de campos obrigatórios
     if (
         empty($username) || empty($email) || empty($password) ||
-        empty($cep) || empty($estado) || empty($cidade) || empty($bairro) || empty($logradouro) || empty($numero)
+        empty($cep) || empty($key) || empty($estado) || empty($cidade) || empty($bairro) || empty($logradouro) || empty($numero)
     ) {
         $errors[] = 'Todos os campos são obrigatórios.';
     }
@@ -51,7 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'cidade' => $cidade,
                 'bairro' => $bairro,
                 'logradouro' => $logradouro,
-                'numero' => $numero
+                'numero' => $numero,
+                'key' => $key
             )
         );
 
@@ -70,15 +70,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (!empty($errors)) {
+        $htmlErrors = implode('<br>', array_map('htmlspecialchars', $errors));
         echo '<script type="text/javascript">',
             'document.addEventListener("DOMContentLoaded", function() {',
-            '  exibeModalSimples("' . implode('<br>', $errors) . '");',
+            '  exibeModalSimples(' . json_encode($htmlErrors) . ');',
             '});',
             '</script>';
     }
 }
 
-
+get_header();
+get_template_part('modal');
 
 ?>
 
@@ -90,30 +92,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <span>Dados de acesso</span>
             </div>
             <div class="col-12 form-group">
-                <label for="username">Nome</label>
-                <input type="text" class="form-control obrigatorio" name="username" id="username"
-                    value="<?php echo esc_attr($username); ?>">
+                <label for="username">Nome *</label>
+                <input type="text" class="form-control" name="username" id="username"
+                    value="<?php echo esc_attr($username); ?>" required>
             </div>
             <div class="form-group col-12 col-md-6">
-                <label for="email">E-mail</label>
-                <input type="email" class="form-control obrigatorio" name="email" id="email"
-                    value="<?php echo esc_attr($email); ?>">
+                <label for="email">E-mail *</label>
+                <input type="email" class="form-control" name="email" id="email" value="<?php echo esc_attr($email); ?>"
+                    required>
             </div>
             <div class="form-group col-12 col-md-6">
-                <label for="password">Senha</label>
-                <input type="password" class="form-control obrigatorio" name="password" id="password">
+                <label for="password">Senha *</label>
+                <input type="password" class="form-control " name="password" id="password" required>
             </div>
             <div class="col-12 separador">
                 <span>Dados de endereço</span>
             </div>
             <div class="form-group col-12 col-md-8">
-                <label for="cep">CEP</label>
-                <input type="text" class="form-control obrigatorio" name="cep" id="cep"
-                    value="<?php echo esc_attr($cep); ?>">
+                <label for="cep">CEP *</label>
+                <input type="text" class="form-control" name="cep" id="cep" value="<?php echo esc_attr($cep); ?>"
+                    required>
             </div>
             <div class="form-group col-12 col-md-4">
-                <label for="estado">Estado</label>
-                <select class="form-control obrigatorio" name="estado" id="estado">
+                <label for="estado">Estado *</label>
+                <select class="form-control " name="estado" id="estado" required>
                     <option value="">Selecione...</option>
                     <option value="AC">Acre</option>
                     <option value="AL">Alagoas</option>
@@ -145,31 +147,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </select>
             </div>
             <div class="form-group col-12 col-md-6">
-                <label for="cidade">Cidade</label>
-                <input type="text" class="form-control obrigatorio" name="cidade" id="cidade"
-                    value="<?php echo esc_attr($cidade); ?>">
+                <label for="cidade">Cidade *</label>
+                <input type="text" class="form-control" name="cidade" id="cidade"
+                    value="<?php echo esc_attr($cidade); ?>" required>
             </div>
             <div class="form-group col-12 col-md-6">
-                <label for="bairro">Bairro</label>
-                <input type="text" class="form-control obrigatorio" name="bairro" id="bairro"
-                    value="<?php echo esc_attr($bairro); ?>">
+                <label for="bairro">Bairro *</label>
+                <input type="text" class="form-control" name="bairro" id="bairro"
+                    value="<?php echo esc_attr($bairro); ?>" required>
             </div>
             <div class="form-group col-12 col-md-9">
-                <label for="logradouro">Logradouro</label>
-                <input type="text" class="form-control obrigatorio" name="logradouro" id="logradouro"
-                    value="<?php echo esc_attr($logradouro); ?>">
+                <label for="logradouro">Logradouro *</label>
+                <input type="text" class="form-control" name="logradouro" id="logradouro"
+                    value="<?php echo esc_attr($logradouro); ?>" required>
             </div>
             <div class="form-group col-12 col-md-3">
-                <label for="numero">Número</label>
-                <input type="text" class="form-control obrigatorio" name="numero" id="numero"
-                    value="<?php echo esc_attr($numero); ?>">
+                <label for="numero">Número *</label>
+                <input type="text" class="form-control" name="numero" id="numero"
+                    value="<?php echo esc_attr($numero); ?>" required>
             </div>
-            <div class="col-12 text-center d-none" id="msg_alerta">
-                <span style="padding: 5px 20px;color: red;">Preencha os campos em destaque!</span>
+            <div class="col-12 separador">
+                <b>Dados API</b>
+            </div>
+            <div class="col-12 form-group">
+                <label for="key">API Key *</label>
+                <input type="text" class="form-control " name="key" id="key" value="<?php echo esc_attr($key); ?>"
+                    required>
             </div>
             <div class="col-12 text-center mt-4">
-                <button type="submit" class="btn btn-primary"
-                    onclick="return validarCampos('obrigatorio','msg_alerta')">Cadastrar</button>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
             </div>
         </div>
     </form>

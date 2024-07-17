@@ -5,3 +5,20 @@ Description: Um tema WordPress com templates de página para cadastro, login e v
 Version: 1.0
 */
 
+html {
+    position: relative;
+    min-height: 110vh;
+    margin: 0px !important;
+}
+
+footer {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
+
+#wpadminbar
+{
+    display: none !important;
+}
+
